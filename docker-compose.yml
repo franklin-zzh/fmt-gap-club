@@ -18,7 +18,9 @@ services:
     container_name: gap-club-frontend
     restart: always
     ports:
-      - "127.0.0.1:3000:80"       # 只监听本地，Nginx 反向代理到前端
+      - "127.0.0.1:3000:80"
+    volumes:
+      - ./frontend01/nginx.dev.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - backend
     networks:

@@ -1,44 +1,111 @@
-import { motion } from 'framer-motion';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import TiltCard from './TiltCard';
+
+const CTA_IMG = 'https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=600&q=80&auto=format&fit=crop';
 
 export default function CTASection() {
+  const sectionRef = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+  const textY = useTransform(scrollYProgress, [0, 1], [30, -30]);
+  const imgY = useTransform(scrollYProgress, [0, 1], [-30, 30]);
+
   return (
-    <section className="relative py-16 md:py-20 overflow-hidden" style={{ background: '#FDFBF7' }}>
-      <div className="max-w-7xl mx-auto px-6">
+    <section ref={sectionRef} className="relative py-20 md:py-28 overflow-hidden" style={{ background: '#FFFFFF' }}>
+      <div className="max-w-7xl mx-auto px-8">
+        {/* Wrapper box framing text + image together */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="relative py-14 md:py-16 px-8 text-center overflow-hidden"
+          transition={{ duration: 0.6 }}
+          className="rounded-[32px] p-8 md:p-12 lg:p-16"
           style={{
-            background: 'linear-gradient(135deg, #B2B8A3 0%, #D4A373 100%)',
+            background: '#FFFFFF',
+            border: '1px solid rgba(107, 112, 92, 0.25)',
+            boxShadow: '0 8px 40px rgba(108, 112, 92, 0.06)',
           }}
         >
-          <div className="absolute -top-20 -left-20 w-64 h-64 rounded-full opacity-30" style={{ background: 'radial-gradient(circle, #FDFBF7, transparent 70%)', filter: 'blur(40px)' }} />
-          <div className="absolute -bottom-20 -right-20 w-72 h-72 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, #6B705C, transparent 70%)', filter: 'blur(50px)' }} />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16 items-center">
 
-          <div className="relative z-10">
-            <span className="text-xs tracking-[0.2em] uppercase font-light text-white opacity-80">
+          {/* Left: Copy + CTA */}
+          <motion.div
+            style={{ y: textY, fontFamily: "'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', 'Roboto', 'Helvetica Neue', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" }}
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="flex flex-col items-start gap-6 max-w-xl"
+          >
+            <motion.span
+              initial={{ opacity: 0, y: -6 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="text-xs tracking-[0.2em] uppercase font-light"
+              style={{ color: '#8E9E8A' }}
+            >
               Join FMT Micro-Ecology
-            </span>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mt-5 mb-6 text-white leading-tight">
+            </motion.span>
+
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium leading-[1.4]" style={{ color: '#1b1b1c' }}>
               加入会员
               <br />
-              获取专属营养方案
+              <span className="italic font-serif" style={{ color: '#6B705C' }}>专属营养方案</span>
             </h2>
-            <p className="text-lg max-w-xl mx-auto mb-10 text-white opacity-90 leading-relaxed">
+
+            <p className="text-lg leading-relaxed" style={{ color: '#454840' }}>
               完成健康档案，提交个人数据，AI模型为您匹配最精准的营养方案。从今天开始，让科学守护您的健康。
             </p>
-            <Link
-              to="/member/init"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-full text-base font-medium transition-all hover:scale-105"
-              style={{ background: '#FDFBF7', color: '#2C2C2C' }}
+
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="mt-2"
             >
-              初始化您的数字化档案 <ArrowRight className="w-5 h-5" />
-            </Link>
-          </div>
+              <Link
+                to="/member/init"
+                className="inline-flex items-center gap-3 px-8 py-4 rounded-full text-base font-semibold text-white transition-all duration-300 shadow-lg hover:shadow-xl"
+                style={{ background: '#1b1b1c' }}
+              >
+                初始化您的数字化档案 <ArrowRight className="w-5 h-5" />
+              </Link>
+            </motion.div>
+          </motion.div>
+
+          {/* Right: Organic blob image */}
+          <motion.div
+            style={{ y: imgY }}
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="w-full flex justify-center md:justify-end"
+          >
+            <TiltCard tiltDegree={5} glareOpacity={0.1} perspective={900}>
+              <div
+                className="w-[400px] h-[420px] md:w-[450px] md:h-[480px] overflow-hidden shadow-[0_35px_60px_-15px_rgba(88,98,74,0.18)] transition-all duration-700 hover:rounded-[50%_50%_40%_60%_/_50%_40%_60%_50%]"
+                style={{
+                  borderRadius: '60% 40% 35% 65% / 60% 45% 55% 40%',
+                  background: '#E8D5B7',
+                }}
+              >
+                <img
+                  src={CTA_IMG}
+                  alt="健康营养"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </TiltCard>
+          </motion.div>
+
+        </div>
         </motion.div>
       </div>
     </section>

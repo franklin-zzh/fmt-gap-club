@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import ProductCard, { ProductDetailModal } from './ProductCard';
 import { ArrowRight } from 'lucide-react';
 
@@ -16,27 +16,17 @@ const DEFAULT_PRODUCTS = [
   { name: '安神助眠包', subtitle: 'Sleep', description: '调节神经递质平衡，改善睡眠质量，缓解焦虑与压力。', target_audience: '睡眠障碍及高压人群', bio_markers: ['褪黑素', '镁', 'GABA', '茶氨酸'], category: 'sleep', order: 10 },
 ];
 
-const TABS = [
-  {
-    key: 'work',
-    label: '职场活力',
-    products: ['vitality', 'energy', 'recovery'],
-  },
-  {
-    key: 'senior',
-    label: '银发健康',
-    products: ['senior', 'immune', 'gut'],
-  },
-  {
-    key: 'lifecycle',
-    label: '专属周期',
-    products: ['growth', 'balance', 'maternal'],
-  },
-];
-
 export default function ProductGallery({ products, loading }) {
-  const [activeTab, setActiveTab] = useState('work');
   const [detailProduct, setDetailProduct] = useState(null);
+  const [isPaused, setIsPaused] = useState(false);
+  const [hasEntered, setHasEntered] = useState(false);
+
+  const scrollRef = useRef(null);
+  const isInView = useInView(scrollRef, { once: true, amount: 0.25 });
+
+  if (isInView && !hasEntered) {
+    setHasEntered(true);
+  }
 
   const catalog = Array.isArray(products) && products.length > 0
     ? products.map(p => ({
@@ -48,112 +38,90 @@ export default function ProductGallery({ products, loading }) {
       }))
     : DEFAULT_PRODUCTS;
 
-  const currentTab = TABS.find(t => t.key === activeTab);
-  const tabProducts = catalog.filter(p => currentTab?.products.includes(p.category));
-  const otherCount = catalog.length - tabProducts.length;
+  // Sort by order
+  const sorted = [...catalog].sort((a, b) => a.order - b.order);
 
   return (
-    <section id="products" className="relative py-20 md:py-28" style={{ background: '#FDFBF7' }}>
+    <section id="products" className="relative py-20 md:py-28 overflow-hidden" style={{ background: '#F5F5F7' }}>
       <div className="max-w-7xl mx-auto px-6">
-        {/* Running header */}
-        <div className="mb-12 md:mb-16">
-          <div style={{ height: '0.5px', width: '100%', background: '#D4A373' }} />
-          <div className="flex items-center justify-between mt-2">
-            <span className="text-[11px] tracking-[0.25em] uppercase font-light" style={{ color: '#8E9E8A' }}>
-              01 / NUTRITION
-            </span>
-            <span className="text-[11px] tracking-[0.25em] uppercase font-light" style={{ color: '#8E9E8A' }}>
-              FMT GAP CLUB
-            </span>
-          </div>
-        </div>
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: 40 }}
+          whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+          className="text-right mb-12"
         >
           <span className="text-xs tracking-[0.2em] uppercase font-light" style={{ color: '#6B705C' }}>
             Nutrition Gallery
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-5 mb-6" style={{ color: '#2C2C2C' }}>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium leading-[1.4] mt-5 mb-6" style={{ color: '#2C2C2C', fontFamily: "'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', 'Roboto', 'Helvetica Neue', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" }}>
             十款营养包 · 全人群覆盖
           </h2>
-          <p className="text-lg max-w-2xl mx-auto leading-relaxed" style={{ color: '#5C5C5C' }}>
+          <p className="text-lg max-w-2xl ml-auto mr-0 leading-relaxed" style={{ color: '#5C5C5C' }}>
             精选匹配你的健康需求
           </p>
         </motion.div>
-
-        {/* Tabs */}
-        <div className="flex items-center justify-center gap-2 mb-10">
-          {TABS.map((tab) => {
-            const isActive = activeTab === tab.key;
-            return (
-              <button
-                key={tab.key}
-                onClick={() => setActiveTab(tab.key)}
-                className="px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300"
-                style={{
-                  background: isActive ? '#6B705C' : 'transparent',
-                  color: isActive ? '#fff' : '#2C2C2C',
-                  border: `1px solid ${isActive ? '#6B705C' : '#E8D5B7'}`,
-                }}
-              >
-                {tab.label}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Product cards row */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4 mb-8">
-          {tabProducts.map((product, idx) => (
-            <ProductCard
-              key={product.id || idx}
-              product={product}
-              index={idx}
-              onShowDetail={setDetailProduct}
-            />
-          ))}
-
-          {/* Ghost card — "+X 款更多人群定制" */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="rounded-2xl overflow-hidden flex flex-col items-center justify-center text-center cursor-default"
-            style={{
-              background: 'rgba(245, 242, 235, 0.5)',
-              border: '1px dashed #E8D5B7',
-              backdropFilter: 'blur(4px)',
-              minHeight: '180px',
-            }}
-          >
-            <div className="text-2xl font-bold mb-1" style={{ color: '#B2B8A3' }}>+{otherCount}</div>
-            <div className="text-sm font-medium" style={{ color: '#6B705C' }}>更多人群定制</div>
-            <div className="text-[10px] mt-1 px-4" style={{ color: '#B2B8A3' }}>
-              儿童·女性·助眠等
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Global CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center"
-        >
-          <button
-            onClick={() => setDetailProduct(catalog[0])}
-            className="inline-flex items-center gap-2 px-7 py-3 rounded-full text-sm font-medium transition-all hover:opacity-80"
-            style={{ background: 'rgba(107,112,92,0.08)', color: '#6B705C' }}
-          >
-            探索全人群精准定制矩阵 <ArrowRight className="w-4 h-4" />
-          </button>
-        </motion.div>
       </div>
+
+      {/* Scrolling product strip — full viewport width */}
+      <motion.div
+        ref={scrollRef}
+        initial={{ opacity: 0, y: 24 }}
+        animate={hasEntered ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+        className="w-full"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+      >
+        <div
+          className="flex gap-4"
+          style={{
+            animation: hasEntered && !isPaused
+              ? 'scrollLeft 70s linear infinite'
+              : 'none',
+            width: 'max-content',
+          }}
+        >
+          {/* Duplicate the list for seamless loop */}
+          {[...sorted, ...sorted].map((product, idx) => (
+            <div
+              key={`${product.id || product.name}-${idx}`}
+              className="flex-shrink-0"
+              style={{ width: '300px' }}
+            >
+              <ProductCard
+                product={product}
+                index={idx % sorted.length}
+                onShowDetail={setDetailProduct}
+              />
+            </div>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* Keyframes for scroll-left animation injected via style tag */}
+      <style>{`
+        @keyframes scrollLeft {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+      `}</style>
+
+      {/* Global CTA */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="text-center mt-10"
+      >
+        <button
+          onClick={() => setDetailProduct(sorted[0])}
+          className="inline-flex items-center gap-2 px-7 py-3 rounded-full text-sm font-medium transition-all hover:opacity-80"
+          style={{ background: 'rgba(107,112,92,0.08)', color: '#6B705C' }}
+        >
+          探索全人群精准定制矩阵 <ArrowRight className="w-4 h-4" />
+        </button>
+      </motion.div>
 
       {detailProduct && (
         <ProductDetailModal

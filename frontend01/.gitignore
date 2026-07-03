@@ -31,4 +31,4 @@ dist-ssr
 .vite
 
 # 设计图/产品内容
-assets
+/assets

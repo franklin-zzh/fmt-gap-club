@@ -83,11 +83,29 @@ module.exports = {
   				to: {
   					height: '0'
   				}
+  			},
+  			'data-flow': {
+  				'0%': {
+  					strokeDashoffset: '2000'
+  				},
+  				'100%': {
+  					strokeDashoffset: '0'
+  				}
+  			},
+  			'pulse-line': {
+  				'0%, 100%': {
+  					opacity: '0.3'
+  				},
+  				'50%': {
+  					opacity: '1'
+  				}
   			}
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out'
+  			'accordion-up': 'accordion-up 0.2s ease-out',
+  			'data-flow': 'data-flow 4s linear infinite',
+  			'pulse-line': 'pulse-line 2s ease-in-out infinite'
   		}
   	}
   },

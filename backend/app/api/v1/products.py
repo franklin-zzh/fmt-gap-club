@@ -1,11 +1,16 @@
+import os
+import shutil
+import uuid
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from sqlalchemy.orm import Session
+from app.core.config import get_settings
 from app.db.session import get_db
 from app.api.deps import get_current_active_user, require_admin
 from app import models, schemas
 
 router = APIRouter(prefix="/products", tags=["products"])
+settings = get_settings()
 
 
 @router.get("", response_model=List[schemas.ProductResponse])
@@ -49,6 +54,34 @@ def update_product(
     db.commit()
     db.refresh(product)
     return product
+
+
+@router.post("/upload-image")
+def upload_product_image(
+    file: UploadFile = File(...),
+    admin: models.User = Depends(require_admin),
+):
+    """Upload a product image and return its URL path."""
+    if not file.filename:
+        raise HTTPException(status_code=400, detail="No file provided")
+
+    # Validate file type
+    allowed_types = {"image/jpeg", "image/png", "image/gif", "image/webp"}
+    if file.content_type not in allowed_types:
+        raise HTTPException(status_code=400, detail=f"Unsupported file type: {file.content_type}. Allowed: JPEG, PNG, GIF, WebP")
+
+    # Generate unique filename to avoid conflicts
+    ext = os.path.splitext(file.filename)[1] or ".png"
+    unique_name = f"product_{uuid.uuid4().hex[:12]}{ext}"
+
+    upload_dir = settings.UPLOAD_DIR
+    os.makedirs(upload_dir, exist_ok=True)
+    file_path = os.path.join(upload_dir, unique_name)
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    return {"url": f"/static/uploads/{unique_name}"}
 
 
 @router.delete("/{product_id}")

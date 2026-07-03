@@ -43,7 +43,7 @@ export default function AdminLayout() {
             <Leaf className="w-4 h-4 text-white" />
           </div>
           <div className="leading-tight">
-            <div className="text-sm font-bold text-white">FMT微生态</div>
+            <div className="text-sm font-bold text-white">GAP 养好菌小屋</div>
             <div className="text-[10px] tracking-[0.15em] uppercase" style={{ color: '#D4A373' }}>运营后台</div>
           </div>
         </div>

@@ -1,9 +1,8 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useRef } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-const TECH_IMG = '/images/tech_procedure02.png';
+import techBg from '/src/assets/images/tech01.png';
 
 const TECH_ITEMS = [
   { label: '全基因组测序分析技术', text: '采用前沿测序技术深度解码肠道菌群，提供数据驱动、客观严谨的临床级评估。', color: '#4E594C', blobShape: '48% 52% 61% 39% / 42% 39% 61% 58%', link: '/technology', linkText: '了解全基因组测序流程' },
@@ -15,6 +14,15 @@ const TECH_ITEMS = [
 export default function TechSection() {
   const [hoveredIdx, setHoveredIdx] = useState(null);
   const [clickedIdx, setClickedIdx] = useState(null);
+  const sectionRef = useRef(null);
+
+  // Scroll parallax: image and text move at different speeds
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+  const imgParallax = useTransform(scrollYProgress, [0, 1], [60, -60]);
+  const textParallax = useTransform(scrollYProgress, [0, 1], [-30, 30]);
 
   const handleClick = (idx) => {
     setClickedIdx(idx);
@@ -22,62 +30,55 @@ export default function TechSection() {
   };
 
   return (
-    <section id="technology" className="relative py-20 md:py-24 overflow-hidden" style={{ background: '#F5F2EB' }}>
-      <div className="absolute top-20 -left-32 w-[400px] h-[400px] rounded-full opacity-20" style={{ background: 'radial-gradient(circle, #B2B8A3, transparent 70%)', filter: 'blur(60px)' }} />
-      <div className="absolute bottom-20 -right-32 w-[500px] h-[500px] rounded-full opacity-15" style={{ background: 'radial-gradient(circle, #D4A373, transparent 70%)', filter: 'blur(70px)' }} />
+    <section id="technology" ref={sectionRef} className="relative py-20 md:py-24 overflow-hidden" style={{ background: '#FFFFFF' }}>
+      {/* Decorative blur circles */}
+      <div className="absolute top-20 -left-32 w-[400px] h-[400px] rounded-full opacity-20 pointer-events-none" style={{ background: 'radial-gradient(circle, #B2B8A3, transparent 70%)', filter: 'blur(60px)' }} />
+      <div className="absolute bottom-20 -right-32 w-[500px] h-[500px] rounded-full opacity-15 pointer-events-none" style={{ background: 'radial-gradient(circle, #D4A373, transparent 70%)', filter: 'blur(70px)' }} />
 
       <div className="relative max-w-7xl mx-auto px-6">
-        {/* Minimal running header: thin line + section left + brand right */}
-        <div className="mb-12 md:mb-16">
-          <div style={{ height: '0.5px', width: '100%', background: '#D4A373' }} />
-          <div className="flex items-center justify-between mt-2">
-            <span className="text-[11px] tracking-[0.25em] uppercase font-light" style={{ color: '#8E9E8A' }}>
-              02 / CORE TECH
-            </span>
-            <span className="text-[11px] tracking-[0.25em] uppercase font-light" style={{ color: '#8E9E8A' }}>
-              FMT GAP CLUB
-            </span>
-          </div>
-        </div>
-
         <div className="grid md:grid-cols-5 gap-10 items-center">
-          {/* Left: Image */}
+          {/* Left: 背景图片容器 */}
           <motion.div
+            style={{ y: imgParallax }}
             initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="relative rounded-[32px] overflow-hidden md:col-span-3 aspect-square"
-            style={{ border: '1px solid #E8D5B7' }}
-          >
-            <img src={TECH_IMG} alt="技术流程图" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 flex items-end p-8" style={{ background: 'linear-gradient(to top, rgba(44,44,44,0.6), transparent)' }}>
-              <div>
-                <div className="text-xs tracking-[0.2em] uppercase text-white opacity-80 mb-1">AI Neural Network</div>
-                <div className="text-lg font-bold text-white">微生态智能匹配引擎</div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Right: Title + Interactive items */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
             className="md:col-span-2"
           >
-            <span className="text-xs tracking-[0.2em] uppercase font-light" style={{ color: '#6B705C' }}>
+            <div className="relative aspect-[4/5] rounded-2xl overflow-hidden">
+              <img
+                src={techBg}
+                alt="自然背景"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0" style={{
+                background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.06) 50%, rgba(0,0,0,0.2) 100%)',
+              }} />
+            </div>
+          </motion.div>
+
+          {/* Right: Title + Interactive items */}
+          <motion.div
+            style={{ y: textParallax }}
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="md:col-span-3"
+          >
+            <div style={{ maxWidth: '580px' }}>
+        <span className="text-xs tracking-[0.2em] uppercase font-light" style={{ color: '#6B705C' }}>
               Tech Core
             </span>
-            <h2 className="text-4xl md:text-5xl font-bold mt-6 mb-8" style={{ color: '#2C2C2C' }}>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium leading-[1.4] mt-6 mb-8" style={{ color: '#2C2C2C', fontFamily: "'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', 'Roboto', 'Helvetica Neue', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" }}>
               核心技术支撑
             </h2>
             <p className="font-sans text-[15px] font-normal leading-relaxed tracking-wide antialiased mb-10" style={{ color: '#3D423C' }}>
               我们汇聚全球前沿微生态科研成果，构建知识库中心和大数据平台。通过AI微生态匹配模型和个性化算法，为您定制科学、精准、可持续的营养解决方案。
             </p>
 
-            <div className="space-y-10">
+            <div className="space-y-12">
               {TECH_ITEMS.map((item, idx) => {
                 const isHovered = hoveredIdx === idx;
                 const isClicked = clickedIdx === idx;
@@ -95,9 +96,10 @@ export default function TechSection() {
                       onMouseEnter={() => setHoveredIdx(idx)}
                       onMouseLeave={() => setHoveredIdx(null)}
                       onClick={() => handleClick(idx)}
+                      whileHover={{ x: 6, transition: { type: 'spring', stiffness: 300, damping: 20 } }}
                     >
                       <div className="flex items-start gap-4" style={{ transition: 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)', opacity: isDimmed ? 0.6 : 1 }}>
-                        {/* Organic pebble dot — unique shape + matte mineral color */}
+                        {/* Organic pebble dot */}
                         <div className="relative mt-1 shrink-0">
                           <div
                             style={{
@@ -106,8 +108,8 @@ export default function TechSection() {
                               backgroundColor: item.color,
                               borderRadius: item.blobShape,
                               transition: 'all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                              transform: isHovered ? 'scale(1.25) rotate(15deg)' : 'scale(1)',
-                              boxShadow: isHovered ? `0 8px 20px ${item.color}33` : 'none',
+                              transform: isHovered ? 'scale(1.35) rotate(15deg)' : 'scale(1)',
+                              boxShadow: isHovered ? `0 8px 24px ${item.color}44` : 'none',
                             }}
                           />
                         </div>
@@ -116,7 +118,12 @@ export default function TechSection() {
                         <div className="flex-1">
                           <div className="text-sm font-bold transition-colors duration-300 flex items-center gap-2" style={{ color: isHovered ? '#8B5E3C' : '#2C2C2C' }}>
                             {item.label}
-                            <ArrowRight className="w-3.5 h-3.5 transition-all duration-300" style={{ opacity: isHovered ? 1 : 0.25, transform: isHovered ? 'translateX(2px)' : 'translateX(0)' }} />
+                            <motion.div
+                              animate={{ x: isHovered ? 4 : 0 }}
+                              transition={{ type: 'spring', stiffness: 300 }}
+                            >
+                              <ArrowRight className="w-3.5 h-3.5" style={{ opacity: isHovered ? 1 : 0.25 }} />
+                            </motion.div>
                           </div>
 
                           <AnimatePresence>
@@ -131,7 +138,6 @@ export default function TechSection() {
                                 <div className="text-xs leading-relaxed mt-1.5" style={{ color: '#8E9E8A' }}>
                                   {item.text}
                                 </div>
-                                {/* Secondary page gateway link */}
                                 <div className="mt-2">
                                   <Link
                                     to={item.link}
@@ -148,7 +154,7 @@ export default function TechSection() {
                       </div>
                     </motion.div>
 
-                    {/* Click ripple effect */}
+                    {/* Click ripple */}
                     <AnimatePresence>
                       {isClicked && (
                         <motion.div
@@ -165,84 +171,9 @@ export default function TechSection() {
                 );
               })}
             </div>
+            </div>
           </motion.div>
         </div>
-
-        {/* 5-step process timeline */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: '-50px' }}
-          transition={{ duration: 0.6 }}
-          className="mt-16 md:mt-20 pt-12 md:pt-16"
-          style={{ borderTop: '0.5px solid rgba(212,163,115,0.25)' }}
-        >
-          <h3 className="text-2xl md:text-3xl font-bold text-center mb-12" style={{ color: '#2C2C2C' }}>
-            从数据到方案 · 闭环精准
-          </h3>
-
-          <div className="relative max-w-5xl mx-auto">
-            {/* Connecting line behind dots */}
-            <div className="absolute top-[11px] left-[8%] right-[8%]" style={{ height: '0.5px', background: 'rgba(212,163,115,0.2)' }} />
-
-            {/* 5 steps */}
-            <div className="grid grid-cols-5 gap-4">
-              {[
-                { num: '01', label: '采集', title: '数字化建档', sub: '生物样本输入' },
-                { num: '02', label: '解码', title: 'AI 模型多维', sub: '深度解析' },
-                { num: '03', label: '循证', title: '前沿知识库', sub: '科学匹配' },
-                { num: '04', label: '转化', title: '动态算法', sub: '生成独属方案' },
-                { num: '05', label: '迭代', title: '持续追踪', sub: '长期伴随优化' },
-              ].map((step, idx) => (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-30px' }}
-                  transition={{ duration: 0.5, delay: idx * 0.12 }}
-                  className="flex flex-col items-center text-center"
-                >
-                  {/* Dot */}
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    whileInView={{ scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: 0.2 + idx * 0.12, ease: 'backOut' }}
-                    className="w-[5px] h-[5px] rounded-full mb-3 relative z-10"
-                    style={{ background: '#4E594C', boxShadow: '0 0 0 3px rgba(78,89,76,0.12)' }}
-                  />
-
-                  {/* Step number + label */}
-                  <div className="text-[10px] tracking-[0.2em] uppercase font-light mb-1.5" style={{ color: '#8E9E8A' }}>
-                    {step.num} / {step.label}
-                  </div>
-
-                  {/* Title */}
-                  <div className="text-xs font-bold leading-tight" style={{ color: '#2C2C2C' }}>
-                    {step.title}
-                  </div>
-
-                  {/* Sub */}
-                  <div className="text-[11px] leading-tight mt-0.5" style={{ color: '#8E9E8A' }}>
-                    {step.sub}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-
-          {/* Bottom summary */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="text-center text-xs leading-relaxed mt-10 max-w-xl mx-auto"
-            style={{ color: '#8E9E8A' }}
-          >
-            让每一次微小的数据起伏，都有坚实的科研背书；始于严谨科学，归于生命个体。
-          </motion.p>
-        </motion.div>
       </div>
     </section>
   );

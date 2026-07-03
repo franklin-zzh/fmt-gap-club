@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FileText, ArrowUpRight, BookOpen, ArrowLeft } from 'lucide-react';
+import { FileText, ArrowUpRight, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { articles as articlesApi } from '@/api/entityApi';
+import botanicalImg from '@/assets/images/tech_procedure02.png';
+import Navbar from '@/components/landing/Navbar';
 
 const CATEGORY_LABELS = {
   knowledge: '知识库',
@@ -37,7 +39,7 @@ const DEFAULT_ARTICLES = [
   },
 ];
 
-const BOTANICAL_IMG = '/images/tech_procedure02.png';
+const BOTANICAL_IMG = botanicalImg;
 
 export default function KnowledgeBasePage() {
   const [articles, setArticles] = useState([]);
@@ -67,35 +69,9 @@ export default function KnowledgeBasePage() {
       transition={{ duration: 0.3 }}
       className="min-h-screen" style={{ background: '#FDFBF7' }}
     >
-      {/* Simple top bar */}
-      <div className="sticky top-0 z-40" style={{ background: 'rgba(253,251,247,0.9)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #E8D5B7' }}>
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 text-sm font-medium hover:opacity-70 transition-opacity" style={{ color: '#6B705C' }}>
-            <ArrowLeft className="w-4 h-4" /> 返回首页
-          </Link>
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: '#6B705C' }}>
-              <span className="text-[10px] font-bold text-white">F</span>
-            </div>
-            <span className="text-xs font-bold" style={{ color: '#2C2C2C' }}>FMT微生态</span>
-          </Link>
-        </div>
-      </div>
+      <Navbar />
 
-      <div className="max-w-7xl mx-auto px-6 py-16 md:py-24">
-        {/* Running header */}
-        <div className="mb-14">
-          <div style={{ height: '0.5px', width: '100%', background: '#D4A373' }} />
-          <div className="flex items-center justify-between mt-2">
-            <span className="text-[11px] tracking-[0.25em] uppercase font-light" style={{ color: '#8E9E8A' }}>
-              03 / KNOWLEDGE
-            </span>
-            <span className="text-[11px] tracking-[0.25em] uppercase font-light" style={{ color: '#8E9E8A' }}>
-              FMT GAP CLUB
-            </span>
-          </div>
-        </div>
-
+      <div className="max-w-7xl mx-auto px-6 pt-24 md:pt-28 pb-16 md:pb-24">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

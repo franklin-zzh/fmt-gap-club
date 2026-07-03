@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Sprout, Heart, Zap, Baby, Shield, Brain, Dumbbell, Leaf, Moon, Activity, X } from 'lucide-react';
 import { useState } from 'react';
+import TiltCard from './TiltCard';
 
 const CATEGORY_CONFIG = {
   growth: { icon: Sprout, gradient: 'linear-gradient(135deg, #B2B8A3, #C7C8B6)', color: '#6B705C' },
@@ -26,17 +27,20 @@ export default function ProductCard({ product, index, onShowDetail }) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-30px' }}
         transition={{ duration: 0.4, delay: (index % 5) * 0.06 }}
-        whileHover={{ y: -4 }}
         onClick={() => onShowDetail?.(product)}
-        className="group cursor-pointer rounded-2xl overflow-hidden transition-all duration-300"
-        style={{
-          background: '#FFFFFF',
-          border: '1px solid #E8D5B7',
-          boxShadow: '0 2px 12px rgba(108, 112, 92, 0.04)',
-        }}
+        className="group cursor-pointer"
       >
-        {/* Product image area — ~128px tall, shows image or gradient+icon fallback */}
-        <div className="relative h-28 sm:h-32 flex items-center justify-center overflow-hidden" style={{ background: config.gradient }}>
+        <TiltCard tiltDegree={6} glareOpacity={0.08} perspective={600}>
+        <div
+          className="rounded-2xl overflow-hidden transition-all duration-300"
+          style={{
+            background: '#FFFFFF',
+            border: '1px solid #E8D5B7',
+            boxShadow: '0 2px 12px rgba(108, 112, 92, 0.04)',
+          }}
+        >
+        {/* Product image area — shows image or gradient+icon fallback */}
+        <div className="relative h-32 sm:h-36 flex items-center justify-center overflow-hidden" style={{ background: config.gradient }}>
           {product.image_url ? (
             <img
               src={product.image_url}
@@ -62,6 +66,8 @@ export default function ProductCard({ product, index, onShowDetail }) {
 
         {/* Hover indicator */}
         <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: `inset 0 0 0 2px ${config.color}` }} />
+      </div>
+        </TiltCard>
       </motion.div>
     </>
   );

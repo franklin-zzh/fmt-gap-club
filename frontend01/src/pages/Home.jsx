@@ -1,15 +1,19 @@
 import { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { products as productsApi } from '@/api/entityApi';
 import Navbar from '@/components/landing/Navbar';
 import Hero from '@/components/landing/Hero';
 import ProductGallery from '@/components/landing/ProductGallery';
 import TechSection from '@/components/landing/TechSection';
+import DataToSolution from '@/components/landing/DataToSolution';
 import CTASection from '@/components/landing/CTASection';
 import Footer from '@/components/landing/Footer';
+import MouseGlow from '@/components/landing/MouseGlow';
 
 const SCROLL_KEY = 'fmt_home_scroll';
 
 export default function Home() {
+  const location = useLocation();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const restored = useRef(false);
@@ -18,14 +22,24 @@ export default function Home() {
     loadData();
   }, []);
 
-  // Restore scroll position when returning from secondary pages
+  // Restore scroll position OR navigate to section
   useEffect(() => {
+    const state = location.state;
+    if (state?.scrollTo) {
+      // Navigated from Navbar section link — scroll to that section
+      restored.current = true;
+      requestAnimationFrame(() => {
+        const el = document.getElementById(state.scrollTo);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      });
+      return;
+    }
+
     if (!restored.current) {
       const saved = sessionStorage.getItem(SCROLL_KEY);
       if (saved) {
         const y = parseInt(saved, 10);
         if (y > 0) {
-          // Wait for content to render before scrolling
           requestAnimationFrame(() => {
             window.scrollTo({ top: y, behavior: 'instant' });
           });
@@ -34,7 +48,7 @@ export default function Home() {
       }
       restored.current = true;
     }
-  }, []);
+  }, [location.state]);
 
   // Save scroll position before navigating away
   useEffect(() => {
@@ -62,11 +76,13 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen" style={{ background: '#FDFBF7' }}>
+    <div className="min-h-screen relative" style={{ background: '#FFFFFF' }}>
+      <MouseGlow size={500} color1="#B2B8A3" color2="#D4A373" opacity={0.08} blur={120} />
       <Navbar />
       <Hero />
-      <ProductGallery products={products} loading={loading} />
       <TechSection />
+      <DataToSolution />
+      <ProductGallery products={products} loading={loading} />
       <CTASection />
       <Footer />
     </div>

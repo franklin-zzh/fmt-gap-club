@@ -42,7 +42,7 @@ export default function MemberLayout() {
             <Leaf className="w-4 h-4 text-white" />
           </div>
           <div className="leading-tight">
-            <div className="text-sm font-bold" style={{ color: '#2C2C2C' }}>FMT微生态</div>
+            <div className="text-sm font-bold" style={{ color: '#2C2C2C' }}>GAP 养好菌小屋</div>
             <div className="text-[10px] tracking-[0.15em] uppercase" style={{ color: '#6B705C' }}>会员中心</div>
           </div>
         </div>

@@ -50,7 +50,7 @@ export default function MemberInit() {
             <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: '#6B705C' }}>
               <Leaf className="w-4 h-4 text-white" />
             </div>
-            <span className="text-sm font-bold" style={{ color: '#2C2C2C' }}>FMT微生态</span>
+            <span className="text-sm font-bold" style={{ color: '#2C2C2C' }}>GAP 养好菌小屋</span>
           </Link>
           <div className="flex items-center gap-4">
             <Link to="/login" className="text-sm font-medium hover:opacity-70 transition-opacity" style={{ color: '#6B705C' }}>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { products as productsApi } from '@/api/entityApi';
-import { Plus, Pencil, Trash2, X, Package } from 'lucide-react';
+import { Plus, Pencil, Trash2, X, Package, Upload } from 'lucide-react';
 
 const CATEGORIES = [
   { value: 'growth', label: '儿童成长' },
@@ -164,6 +164,7 @@ function ProductForm({ product, onSave, onClose }) {
     order: product?.order || 0,
   });
   const [markerInput, setMarkerInput] = useState('');
+  const [uploading, setUploading] = useState(false);
 
   const inputStyle = { background: '#F5F2EB', border: '1px solid #E8D5B7', borderRadius: '12px', padding: '12px 16px', color: '#2C2C2C', fontSize: '14px', width: '100%' };
   const labelStyle = { color: '#6B705C', fontSize: '12px', fontWeight: '600', marginBottom: '6px', display: 'block' };
@@ -176,8 +177,8 @@ function ProductForm({ product, onSave, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.4)' }} onClick={onClose}>
-      <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-[28px] p-8" style={{ background: '#FDFBF7' }} onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.4)' }} onMouseDown={onClose}>
+      <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-[28px] p-8" style={{ background: '#FDFBF7' }} onMouseDown={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold" style={{ color: '#2C2C2C' }}>{product ? '编辑产品' : '新增产品'}</h2>
           <button onClick={onClose}><X className="w-5 h-5" style={{ color: '#2C2C2C' }} /></button>
@@ -208,8 +209,68 @@ function ProductForm({ product, onSave, onClose }) {
             </div>
           </div>
           <div>
-            <label style={labelStyle}>产品图片URL</label>
-            <input style={inputStyle} value={data.image_url} onChange={(e) => setData({ ...data, image_url: e.target.value })} placeholder="留空则使用默认占位图" />
+            <label style={labelStyle}>产品图片</label>
+            {/* Image preview */}
+            {data.image_url ? (
+              <div className="relative mb-3 rounded-xl overflow-hidden" style={{ background: '#F5F2EB', border: '1px solid #E8D5B7' }}>
+                <img src={data.image_url} alt="product preview" className="w-full h-40 object-cover" />
+                <button
+                  onClick={() => setData({ ...data, image_url: '' })}
+                  className="absolute top-2 right-2 p-1.5 rounded-full"
+                  style={{ background: 'rgba(0,0,0,0.5)', color: '#fff' }}
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <div
+                className="relative mb-3 rounded-xl flex flex-col items-center justify-center h-40 cursor-pointer transition-all hover:opacity-80"
+                style={{ background: '#F5F2EB', border: '1px dashed #E8D5B7', color: '#6B705C' }}
+                onClick={() => document.getElementById('product-image-input')?.click()}
+              >
+                {uploading ? (
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="w-6 h-6 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#6B705C', borderTopColor: 'transparent' }} />
+                    <span className="text-xs">上传中...</span>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center gap-2">
+                    <Upload className="w-8 h-8 opacity-40" />
+                    <span className="text-xs">点击选择图片</span>
+                    <span className="text-xs opacity-50">支持 JPG / PNG / GIF / WebP</span>
+                  </div>
+                )}
+              </div>
+            )}
+            <input
+              id="product-image-input"
+              type="file"
+              accept="image/jpeg,image/png,image/gif,image/webp"
+              className="hidden"
+              disabled={uploading}
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                setUploading(true);
+                try {
+                  const result = await productsApi.uploadImage(file);
+                  setData({ ...data, image_url: result.url });
+                } catch (err) {
+                  console.error('Upload failed:', err);
+                  alert('图片上传失败，请重试');
+                } finally {
+                  setUploading(false);
+                  // Reset file input so the same file can be re-selected
+                  e.target.value = '';
+                }
+              }}
+            />
+            <input
+              style={{ ...inputStyle, fontSize: '12px', padding: '8px 12px' }}
+              value={data.image_url}
+              onChange={(e) => setData({ ...data, image_url: e.target.value })}
+              placeholder="或手动输入图片URL"
+            />
           </div>
           <div>
             <label style={labelStyle}>关键生物指标</label>

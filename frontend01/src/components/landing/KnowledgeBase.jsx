@@ -61,7 +61,7 @@ export default function KnowledgeBase({ articles, loading }) {
           <span className="text-xs tracking-[0.2em] uppercase font-light" style={{ color: '#6B705C' }}>
             Knowledge & Research
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-5 mb-6" style={{ color: '#2C2C2C' }}>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium leading-[1.4] mt-5 mb-6" style={{ color: '#2C2C2C', fontFamily: "'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', 'Roboto', 'Helvetica Neue', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" }}>
             知识库 · 科研文献
           </h2>
           <p className="text-lg max-w-2xl mx-auto leading-relaxed" style={{ color: '#5C5C5C' }}>
@@ -78,7 +78,7 @@ export default function KnowledgeBase({ articles, loading }) {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
               className="group rounded-[24px] p-7 cursor-pointer transition-all duration-300 hover:-translate-y-1"
-              style={{ background: '#FFFFFF', border: '1px solid #E8D5B7', boxShadow: '0 4px 24px rgba(108,112,92,0.04)' }}
+              style={{ background: '#FFFFFF', border: '1px solid rgba(107, 112, 92, 0.2)', boxShadow: '0 4px 24px rgba(108,112,92,0.04)' }}
             >
               <div className="flex items-center justify-between mb-5">
                 <span
@@ -111,7 +111,7 @@ export default function KnowledgeBase({ articles, loading }) {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
           className="rounded-[32px] overflow-hidden grid md:grid-cols-2 items-center"
-          style={{ background: '#F5F2EB', border: '1px solid #E8D5B7' }}
+          style={{ background: '#F5F2EB', border: '1px solid rgba(107, 112, 92, 0.2)' }}
         >
           <div className="p-10 md:p-14">
             <div className="flex items-center gap-3 mb-5">
@@ -122,7 +122,7 @@ export default function KnowledgeBase({ articles, loading }) {
                 Technical Whitepaper
               </span>
             </div>
-            <h3 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: '#2C2C2C' }}>
+            <h3 className="text-3xl md:text-4xl lg:text-5xl font-medium leading-[1.4] mb-4" style={{ color: '#2C2C2C', fontFamily: "'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', 'Roboto', 'Helvetica Neue', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" }}>>
               技术白皮书 · 透明可信
             </h3>
             <p className="text-base leading-relaxed mb-8" style={{ color: '#5C5C5C' }}>

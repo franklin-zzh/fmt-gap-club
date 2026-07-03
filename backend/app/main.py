@@ -10,7 +10,7 @@ from app.seed import seed_data
 
 settings = get_settings()
 
-# python3 -m uvicorn app.main:app --host 127.0.0.1 --port 8001
+# python3 -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
