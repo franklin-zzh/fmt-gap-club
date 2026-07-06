@@ -1,12 +1,7 @@
 import { useRef, useState, useCallback, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import heroBg from '/src/assets/images/0GAP_club.png';
-import bg01 from '/src/assets/images/bg01.png';
-import bg02 from '/src/assets/images/bg02.png';
-import bg03 from '/src/assets/images/bg03.png';
-import bg04 from '/src/assets/images/bg04.png';
-import bg05 from '/src/assets/images/bg05.png';
+import { ossUrl } from '@/lib/images';
 
 /* ------------------------------------------------------------------ */
 /*  Hero slide data — first entry is the hero, followed by 5 steps    */
@@ -24,35 +19,35 @@ const STEPS = [
     enLabel: 'biotech',
     zhTitle: '精准检测评估',
     desc: '采用高通量基因测序技术，精准解码肠道菌群结构与功能，提供数据驱动、客观严谨的专业健康评估。',
-    imgSrc: bg01,
+    imgSrc: ossUrl('bg01.png'),
   },
   {
     step: '02',
     enLabel: 'psychology',
     zhTitle: '个性化养菌方案',
     desc: '依托自研 AI 算法与专属大数据库，深度解析个体微生态特征，智能输出千人千面的精准化菌群养护方案。',
-    imgSrc: bg02,
+    imgSrc: ossUrl('bg02.png'),
   },
   {
     step: '03',
     enLabel: 'monitoring',
     zhTitle: '全生命周期动态监管',
     desc: '通过会员制体系，实现定期随访与菌群复测，实时监控肠道健康状态，动态迭代、精准优化个性化干预方案。',
-    imgSrc: bg03,
+    imgSrc: ossUrl('bg03.png'),
   },
   {
     step: '04',
     enLabel: 'family_member',
     zhTitle: '家庭成员参与',
     desc: '以家庭为单位做肠道微生态管理，让全家共同参与、共同受益，全面筑牢家庭成员互相感染与调理的日常肠道健康防线。',
-    imgSrc: bg04,
+    imgSrc: ossUrl('bg04.png'),
   },
   {
     step: '05',
     enLabel: 'model_training',
     zhTitle: '数据累积 · 数字孪生',
     desc: '建立虚拟「肠道数字孪生」模型，实现对用户长期随访数据、亚健康趋势的前瞻性与预见性精准健康演进管理。',
-    imgSrc: bg05,
+    imgSrc: ossUrl('bg05.png'),
   },
 ];
 
@@ -144,7 +139,7 @@ export default function Hero() {
           {isHero ? (
             <div
               className="parallax-bg absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url(${heroBg})` }}
+              style={{ backgroundImage: `url(${ossUrl('0GAP_club.png')})` }}
             />
           ) : (
             <div

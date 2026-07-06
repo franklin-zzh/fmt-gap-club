@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { FileText, ArrowUpRight, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { articles as articlesApi } from '@/api/entityApi';
-import botanicalImg from '@/assets/images/tech_procedure02.png';
+import { ossUrl } from '@/lib/images';
 import Navbar from '@/components/landing/Navbar';
 
 const CATEGORY_LABELS = {
@@ -39,7 +39,7 @@ const DEFAULT_ARTICLES = [
   },
 ];
 
-const BOTANICAL_IMG = botanicalImg;
+const BOTANICAL_IMG = ossUrl('tech_procedure02.png');
 
 export default function KnowledgeBasePage() {
   const [articles, setArticles] = useState([]);

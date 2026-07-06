@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import techBg from '/src/assets/images/tech01.png';
+import { ossUrl } from '@/lib/images';
 
 const TECH_ITEMS = [
   { label: '全基因组测序分析技术', text: '采用前沿测序技术深度解码肠道菌群，提供数据驱动、客观严谨的临床级评估。', color: '#4E594C', blobShape: '48% 52% 61% 39% / 42% 39% 61% 58%', link: '/technology', linkText: '了解全基因组测序流程' },
@@ -48,7 +48,7 @@ export default function TechSection() {
           >
             <div className="relative aspect-[4/5] rounded-2xl overflow-hidden">
               <img
-                src={techBg}
+                src={ossUrl('tech01.png')}
                 alt="自然背景"
                 className="w-full h-full object-cover"
               />
