@@ -12,6 +12,14 @@ class Settings(BaseSettings):
     UPLOAD_DIR: str = "./app/static/uploads"
     REPORT_DIR: str = "./app/static/reports"
 
+    # 阿里云 OSS 配置（生产环境请在 .env 中填写 AK/SK）
+    ALIYUN_OSS_ACCESS_KEY_ID: str = ""
+    ALIYUN_OSS_ACCESS_KEY_SECRET: str = ""
+    ALIYUN_OSS_BUCKET_NAME: str = "fmt-gap-club"
+    ALIYUN_OSS_ENDPOINT: str = "oss-cn-beijing.aliyuncs.com"
+    ALIYUN_OSS_CDN_BASE_URL: str = "https://assets.gapclub.fmtcloud.cn"
+    ALIYUN_OSS_PRODUCTS_PREFIX: str = "products"
+
     class Config:
         env_file = ".env"
 

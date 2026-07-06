@@ -1,3 +1,8 @@
+from io import BytesIO
+
+import pytest
+from fastapi import HTTPException, UploadFile
+
 from app import models
 
 
@@ -83,3 +88,64 @@ def test_delete_product(client, admin_headers, db):
 def test_delete_product_not_found(client, admin_headers):
     response = client.delete("/api/v1/products/99999", headers=admin_headers)
     assert response.status_code == 404
+
+
+def test_upload_product_image(client, admin_headers, monkeypatch):
+    captured = {}
+
+    def fake_upload(file, prefix, settings=None):
+        captured["prefix"] = prefix
+        return "https://assets.gapclub.fmtcloud.cn/products/test.png"
+
+    monkeypatch.setattr("app.api.v1.products.upload_to_oss", fake_upload)
+
+    response = client.post(
+        "/api/v1/products/upload-image",
+        files={"file": ("test.png", b"fake image data", "image/png")},
+        headers=admin_headers,
+    )
+    assert response.status_code == 200
+    assert response.json()["url"] == "https://assets.gapclub.fmtcloud.cn/products/test.png"
+    assert captured["prefix"] == "products"
+
+
+def test_upload_product_image_unsupported_type(client, admin_headers):
+    response = client.post(
+        "/api/v1/products/upload-image",
+        files={"file": ("test.txt", b"not an image", "text/plain")},
+        headers=admin_headers,
+    )
+    assert response.status_code == 400
+
+
+def test_upload_product_image_forbidden(client, member_headers):
+    response = client.post(
+        "/api/v1/products/upload-image",
+        files={"file": ("test.png", b"fake image data", "image/png")},
+        headers=member_headers,
+    )
+    assert response.status_code == 403
+
+
+def test_upload_product_image_no_filename():
+    from app.api.v1.products import upload_product_image
+    file = UploadFile(filename="", file=BytesIO(b"fake image data"), headers={"content-type": "image/png"})
+    admin = models.User(id=1, email="admin@test.com", hashed_password="x", role="admin", is_active=True)
+    with pytest.raises(HTTPException) as exc_info:
+        upload_product_image(file, admin=admin)
+    assert exc_info.value.status_code == 400
+
+
+def test_upload_product_image_oss_error(client, admin_headers, monkeypatch):
+    def fake_upload(*args, **kwargs):
+        raise RuntimeError("OSS not configured")
+
+    monkeypatch.setattr("app.api.v1.products.upload_to_oss", fake_upload)
+
+    response = client.post(
+        "/api/v1/products/upload-image",
+        files={"file": ("test.png", b"fake image data", "image/png")},
+        headers=admin_headers,
+    )
+    assert response.status_code == 503
+    assert "OSS not configured" in response.json()["detail"]

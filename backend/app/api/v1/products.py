@@ -1,13 +1,11 @@
-import os
-import shutil
-import uuid
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from sqlalchemy.orm import Session
 from app.core.config import get_settings
 from app.db.session import get_db
-from app.api.deps import get_current_active_user, require_admin
+from app.api.deps import require_admin
 from app import models, schemas
+from app.services.oss import upload_file as upload_to_oss
 
 router = APIRouter(prefix="/products", tags=["products"])
 settings = get_settings()
@@ -70,18 +68,12 @@ def upload_product_image(
     if file.content_type not in allowed_types:
         raise HTTPException(status_code=400, detail=f"Unsupported file type: {file.content_type}. Allowed: JPEG, PNG, GIF, WebP")
 
-    # Generate unique filename to avoid conflicts
-    ext = os.path.splitext(file.filename)[1] or ".png"
-    unique_name = f"product_{uuid.uuid4().hex[:12]}{ext}"
+    try:
+        url = upload_to_oss(file, prefix=settings.ALIYUN_OSS_PRODUCTS_PREFIX)
+    except RuntimeError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
 
-    upload_dir = settings.UPLOAD_DIR
-    os.makedirs(upload_dir, exist_ok=True)
-    file_path = os.path.join(upload_dir, unique_name)
-
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-
-    return {"url": f"/static/uploads/{unique_name}"}
+    return {"url": url}
 
 
 @router.delete("/{product_id}")
