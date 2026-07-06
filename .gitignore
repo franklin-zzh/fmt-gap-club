@@ -1,11 +1,15 @@
 .reasonix/
+resonix.toml
 .DS_Store
 .vscode/
 .idea/
 
-resonix.toml
 
+#md files
 skills-v0/
 skills-v1/
+DESIGN.md
+
+gapclub.fmtcloud.cn.conf
 
 deploy/
