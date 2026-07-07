@@ -1,0 +1,30 @@
+<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 1. 实心背景底盘：彻底告别透明，不管浏览器是黑底还是白底，它都是一个完美的品牌色圆盘 -->
+  <circle cx="24" cy="24" r="24" fill="#6B705C" />
+
+  <!-- 2. 外部细环：反白处理，降低一点透明度做出内嵌层次感 -->
+  <circle cx="24" cy="24" r="20" stroke="#FFFFFF" stroke-width="1.2" opacity="0.3" />
+
+  <!-- 3. 叶片剪影：清晰的主体 -->
+  <path d="M24 10 C18 14 14 22 14 28 C14 34 18 38 24 38 C30 38 34 34 34 28 C34 22 30 14 24 10Z" fill="#FFFFFF" opacity="0.2" />
+  <path d="M24 14 C20 18 17 24 17 28 C17 32 20 35 24 35 C28 35 31 32 31 28 C31 24 28 18 24 14Z" fill="#FFFFFF" opacity="0.4" />
+
+  <!-- 4. 叶脉中心主轴：加粗并提高不透明度，确保小图下依然清晰 -->
+  <path d="M24 14 L24 34" stroke="#FFFFFF" stroke-width="1.4" stroke-linecap="round" opacity="0.9" />
+  <path d="M19 20 C22 20 24 21 24 24" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="round" opacity="0.7" />
+  <path d="M18 26 C21 26 24 27 24 28" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="round" opacity="0.7" />
+
+  <!-- 5. 益生菌颗粒：全部使用实心纯白，在小标签页上会像星星一样非常亮眼 -->
+  <circle cx="24" cy="6" r="1.8" fill="#FFFFFF" />
+  <circle cx="38" cy="14" r="1.4" fill="#FFFFFF" opacity="0.85" />
+  <circle cx="42" cy="24" r="1.8" fill="#FFFFFF" />
+  <circle cx="38" cy="34" r="1.4" fill="#FFFFFF" opacity="0.85" />
+  <circle cx="24" cy="42" r="1.8" fill="#FFFFFF" />
+  <circle cx="10" cy="34" r="1.4" fill="#FFFFFF" opacity="0.85" />
+  <circle cx="6" cy="24" r="1.8" fill="#FFFFFF" />
+  <circle cx="10" cy="14" r="1.4" fill="#FFFFFF" opacity="0.85" />
+
+  <!-- 6. 科技感轨道边缘 -->
+  <path d="M6 24 L10 19" stroke="#FFFFFF" stroke-width="1" stroke-linecap="round" opacity="0.5" />
+  <path d="M42 24 L38 29" stroke="#FFFFFF" stroke-width="1" stroke-linecap="round" opacity="0.5" />
+</svg>

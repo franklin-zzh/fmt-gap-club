@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { products as productsApi, articles as articlesApi, users as usersApi, submissions as submissionsApi, dashboard as dashboardApi } from '@/api/entityApi';
+import { products as productsApi, articles as articlesApi, users as usersApi, submissions as submissionsApi } from '@/api/entityApi';
 import { Users, FileText, Package, TrendingUp, ArrowUpRight } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, CartesianGrid } from 'recharts';
 

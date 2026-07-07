@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Leaf, Shield, HelpCircle } from 'lucide-react';
+import { ArrowRight, Leaf, HelpCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const STEPS = [

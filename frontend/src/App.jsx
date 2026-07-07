@@ -45,29 +45,35 @@ const AnimatedRoutes = () => {
 
   return (
     <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<motion.div {...pageTransition}><Home /></motion.div>} />
-        <Route path="/login" element={<motion.div {...pageTransition}><Login /></motion.div>} />
-        <Route path="/register" element={<motion.div {...pageTransition}><Register /></motion.div>} />
-        <Route path="/knowledge-base" element={<motion.div {...pageTransition}><KnowledgeBasePage /></motion.div>} />
-        <Route path="/member/init" element={<motion.div {...pageTransition}><MemberInit /></motion.div>} />
-        <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
-          <Route path="/member" element={<motion.div {...pageTransition}><MemberLayout /></motion.div>}>
-            <Route index element={<MemberDashboard />} />
-            <Route path="profile" element={<MemberProfile />} />
-            <Route path="submissions" element={<MemberSubmissions />} />
-            <Route path="reports" element={<MemberReports />} />
-            <Route path="subscription" element={<MemberSubscription />} />
+      <motion.div
+        key={location.pathname}
+        {...pageTransition}
+        className="min-h-screen"
+      >
+        <Routes location={location}>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/knowledge-base" element={<KnowledgeBasePage />} />
+          <Route path="/member/init" element={<MemberInit />} />
+          <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
+            <Route path="/member" element={<MemberLayout />}>
+              <Route index element={<MemberDashboard />} />
+              <Route path="profile" element={<MemberProfile />} />
+              <Route path="submissions" element={<MemberSubmissions />} />
+              <Route path="reports" element={<MemberReports />} />
+              <Route path="subscription" element={<MemberSubscription />} />
+            </Route>
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="members" element={<AdminMembers />} />
+              <Route path="products" element={<AdminProducts />} />
+              <Route path="knowledge" element={<AdminKnowledge />} />
+            </Route>
           </Route>
-          <Route path="/admin" element={<motion.div {...pageTransition}><AdminLayout /></motion.div>}>
-            <Route index element={<AdminDashboard />} />
-            <Route path="members" element={<AdminMembers />} />
-            <Route path="products" element={<AdminProducts />} />
-            <Route path="knowledge" element={<AdminKnowledge />} />
-          </Route>
-        </Route>
-        <Route path="*" element={<motion.div {...pageTransition}><PageNotFound /></motion.div>} />
-      </Routes>
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </motion.div>
     </AnimatePresence>
   );
 };

@@ -22,10 +22,9 @@ client.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem(TOKEN_KEY);
-      // Only redirect if not already on login/register
-      if (!window.location.pathname.startsWith('/login') && !window.location.pathname.startsWith('/register')) {
-        window.location.href = '/login';
-      }
+      // Notify the app that the session expired instead of forcing a hard redirect.
+      // AuthProvider / ProtectedRoute will handle the UI state and soft navigation.
+      window.dispatchEvent(new CustomEvent('auth:session-expired'));
     }
     return Promise.reject(error);
   }

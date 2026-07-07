@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Outlet, NavLink, useNavigate, Link } from 'react-router-dom';
 import { LayoutDashboard, User, Upload, FileText, CreditCard, Leaf, LogOut, Menu, Home } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
@@ -12,15 +12,9 @@ const NAV_ITEMS = [
 ];
 
 export default function MemberLayout() {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, logout } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/login');
-    }
-  }, [isAuthenticated]);
 
   const handleLogout = () => {
     logout();

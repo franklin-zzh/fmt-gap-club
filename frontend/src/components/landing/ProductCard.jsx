@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { Sprout, Heart, Zap, Baby, Shield, Brain, Dumbbell, Leaf, Moon, Activity, X } from 'lucide-react';
-import { useState } from 'react';
 import TiltCard from './TiltCard';
 
 const CATEGORY_CONFIG = {

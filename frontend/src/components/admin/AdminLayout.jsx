@@ -11,17 +11,15 @@ const NAV_ITEMS = [
 ];
 
 export default function AdminLayout() {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, logout } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/login');
-    } else if (user && user.role !== 'admin') {
+    if (user && user.role !== 'admin') {
       navigate('/');
     }
-  }, [isAuthenticated, user]);
+  }, [user, navigate]);
 
   const handleLogout = () => {
     logout();

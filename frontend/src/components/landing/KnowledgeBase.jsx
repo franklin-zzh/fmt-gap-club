@@ -122,7 +122,7 @@ export default function KnowledgeBase({ articles, loading }) {
                 Technical Whitepaper
               </span>
             </div>
-            <h3 className="text-3xl md:text-4xl lg:text-5xl font-medium leading-[1.4] mb-4" style={{ color: '#2C2C2C', fontFamily: "'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', 'Roboto', 'Helvetica Neue', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" }}>>
+            <h3 className="text-3xl md:text-4xl lg:text-5xl font-medium leading-[1.4] mb-4" style={{ color: '#2C2C2C', fontFamily: "'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', 'Roboto', 'Helvetica Neue', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" }}>
               技术白皮书 · 透明可信
             </h3>
             <p className="text-base leading-relaxed mb-8" style={{ color: '#5C5C5C' }}>

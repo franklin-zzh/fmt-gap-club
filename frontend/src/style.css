@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@theme {
+  --color-canvas: #FDFBF7;
+  --color-sage: #B2B8A3;
+  --color-terracotta: #D4A373;
+  --color-sand: #E8D5B7;
+  --color-ink: #2C2C2C;
+  --color-ink-muted: #6B6B6B;
+  --color-cream: #FAF8F3;
+  --color-stone-warm: #E5E0D8;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-serif-en {
+  font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+}
+
+/* Custom easing */
+.ease-editorial {
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}

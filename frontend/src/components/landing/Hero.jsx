@@ -1,5 +1,5 @@
 import { useRef, useState, useCallback, useEffect } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { useInView } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { ossUrl } from '@/lib/images';
 
