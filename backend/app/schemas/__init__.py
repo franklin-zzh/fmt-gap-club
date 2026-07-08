@@ -55,6 +55,32 @@ class ProductResponse(ProductBase):
     model_config = ConfigDict(from_attributes=True)
     id: int
     created_at: datetime
+    detail: Optional["ProductDetailResponse"] = None
+
+
+# ===================== ProductDetail =====================
+class ProductDetailBase(BaseModel):
+    efficacy: dict = {}
+    core_meal_replacement: dict = {}
+    synergistic_nutrients: dict = {}
+
+
+class ProductDetailCreate(ProductDetailBase):
+    pass
+
+
+class ProductDetailUpdate(BaseModel):
+    efficacy: Optional[dict] = None
+    core_meal_replacement: Optional[dict] = None
+    synergistic_nutrients: Optional[dict] = None
+
+
+class ProductDetailResponse(ProductDetailBase):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    product_id: int
+    created_at: datetime
+    updated_at: datetime
 
 
 # ===================== Article =====================

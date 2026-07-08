@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "super-secret-key-change-in-production"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
     ALGORITHM: str = "HS256"
-    DATABASE_URL: str = "sqlite:///./data/gapclub.db"
+    DATABASE_URL: str = "mysql+pymysql://root:fumate@127.0.0.1:3306/gap_club?charset=utf8mb4"
     UPLOAD_DIR: str = "./app/static/uploads"
     REPORT_DIR: str = "./app/static/reports"
 

@@ -34,6 +34,26 @@ class Product(Base):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
+    detail: Mapped[Optional["ProductDetail"]] = relationship(back_populates="product", uselist=False)
+
+class ProductDetail(Base):
+    __tablename__ = "product_details"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    # 外键关联到 products 表，设置 unique=True 保证 1对1 约束
+    product_id: Mapped[int] = mapped_column(
+        ForeignKey("products.id", ondelete="CASCADE"), 
+        unique=True, 
+        nullable=False
+    )
+    # 3个详情字段，统一采用 JSON 格式存储复杂结构
+    efficacy: Mapped[dict] = mapped_column(JSON, default=dict)
+    core_meal_replacement: Mapped[dict] = mapped_column(JSON, default=dict)
+    synergistic_nutrients: Mapped[dict] = mapped_column(JSON, default=dict)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    # 反向关联到 product 模型
+    product: Mapped["Product"] = relationship("Product", back_populates="detail")
 
 class Article(Base):
     __tablename__ = "articles"

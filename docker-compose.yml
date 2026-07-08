@@ -1,15 +1,41 @@
 services:
+  global-mysql8:
+    image: mysql:8.0
+    container_name: global-mysql8
+    restart: always
+    ports:
+      - "127.0.0.1:3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: fumate
+      MYSQL_DATABASE: gap_club
+      MYSQL_CHARACTER_SET_SERVER: utf8mb4
+      MYSQL_COLLATION_SERVER: utf8mb4_unicode_ci
+      TZ: Asia/Shanghai
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - gapclub
+
   backend:
     build: ./backend
     container_name: gap-club-backend
     restart: always
+    depends_on:
+      global-mysql8:
+        condition: service_healthy
     ports:
-      - "127.0.0.1:8000:8000"     # 只监听本地，Nginx 通过反向代理访问
+      - "127.0.0.1:8000:8000"
     volumes:
       - ./backend:/app
       - ./logs:/app/logs
     environment:
       - TZ=Asia/Shanghai
+      - DATABASE_URL=mysql+pymysql://root:fumate@global-mysql8:3306/gap_club?charset=utf8mb4
     networks:
       - gapclub
 
@@ -27,6 +53,9 @@ services:
       - backend
     networks:
       - gapclub
+
+volumes:
+  mysql_data:
 
 networks:
   gapclub:
