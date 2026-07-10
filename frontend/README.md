@@ -1,162 +1,159 @@
-# GAP Club
+# GAP Club Frontend
 
-一个基于 React 18 + Vite 6 + FastAPI 构建的现代化、全功能的**中后台及会员制 Web 应用程序**。本项目集成了支付、图表、3D 渲染、地图及富文本编辑器等核心业务模块，采用原子化样式与无障碍组件库，具备生产级别的容器化部署能力。
+基于 **React 18 + Vite 6 + Tailwind CSS** 构建的会员制微生态营养平台前端，覆盖官网落地页、会员中心、管理员后台三大模块。
 
 ## 🚀 特性亮点
 
-- **🛡️ 渐进式类型检查**：利用 TypeScript 的 `checkJs` 模式，在不增加编译负担的情况下，为原生 JavaScript (JSX) 带来全方位的静态类型提示。
-    
-- **🔐 健壮的鉴权系统**：基于 Axios 封装的客户端，深度集成 JWT 自动拦截与刷新机制，完美对接 FastAPI 后端。
-    
-- **🎨 极致的 UI 体验**：采用 **Tailwind CSS 3 + Radix UI 原语**（shadcn/ui 风格），配合 **Framer Motion** 实现细腻的页面过渡与交互动画。
-    
-- **📊 丰富的业务组件**：
-    
-    - **支付系统**：集成 Stripe 线上支付及会员订阅流程。
-        
-    - **数据可视化**：基于 Recharts 的动态数据看板。
-        
-    - **地理信息**：React Leaflet 交互式地图嵌入。
-        
-    - **3D 交互**：引入 Three.js 实现炫酷的 3D 视觉渲染。
-        
-    - **生产力工具**：包含 React Quill 富文本编辑器、CMDK 全局命令面板、Markdown 渲染及 PDF 异步导出（html2canvas + jsPDF）。
-        
+- **🛡️ 渐进式类型检查**：通过 `jsconfig.json` 的 `checkJs: true` 在原生 JavaScript (JSX) 上获得 TypeScript 类型提示。
+- **🔐 统一鉴权**：Axios 拦截器自动携带 JWT，统一处理 401 会话过期事件。
+- **🎨 原子化 UI**：Tailwind CSS 3 + Radix UI 原语（shadcn/ui 风格），配合 Framer Motion 实现细腻转场。
+- **📊 业务组件丰富**：支付（Stripe）、图表（Recharts）、3D 场景（Three.js）、地图（Leaflet）、富文本（React Quill）、Markdown 渲染、PDF 导出等。
 
-## 🛠️ 技术栈总览
+## 🛠️ 技术栈
 
-### 🧠 开发语言与基底
-
-- **主要语言**：JavaScript (JSX) / API 层基于 `.js`
-    
-- **类型辅助**：TypeScript (仅检查模式，通过 `jsconfig.json` 的 `"checkJs": true` 实现)
-    
-- **样式架构**：CSS + Tailwind CSS 3（基于 `tailwind.config.js` 与全局变量配置）
-    
-
-### ⚛️ 核心框架与状态
-
-|**技术**|**用途说明**|
+| 技术 | 用途 |
 |---|---|
-|**React 18**|核心 UI 构建框架（`react` + `react-dom`）|
-|**Vite 6**|下一代前端构建工具与极其暴躁的 HMR 开发服务器|
-|**React Router v6**|前端声明式路由管理（`BrowserRouter` + `Route` + `Maps`）|
-|**@tanstack/react-query v5**|强大的服务端状态同步、异步请求与缓存管理利器|
+| React 18 | 核心 UI 框架 |
+| Vite 6 | 构建工具 + HMR 开发服务器 |
+| React Router v6 | 前端路由 |
+| @tanstack/react-query v5 | 服务端状态缓存 |
+| Tailwind CSS 3 | 原子化样式 |
+| Radix UI | 无头组件原语 |
+| Framer Motion | 动画与页面过渡 |
+| Axios | HTTP 客户端 |
+| Zod + React Hook Form | 表单校验 |
+| Stripe | 支付 |
+| Recharts | 数据可视化 |
+| Three.js | 3D 视觉 |
 
-### 🎨 UI / 视觉 / 交互
-
-- **无障碍原语**：`Radix UI` (深度集成 Dialog, Dropdown, Accordion, Tabs, Select, Toast 等 20+ 组件)
-    
-- **设计风格**：`shadcn/ui` 规范 (通过 `components.json` 及 CSS 变量自定义主题色如 `--primary`, `--background`)
-    
-- **动效引擎**：`Framer Motion` (利用 `AnimatePresence` + `motion.div` 实现优雅的路由与组件过渡)
-    
-- **图标与通知**：`Lucide React` 图标库 + `Sonner` / `react-hot-toast` 异步全局通知
-    
-
-### 📋 表单与校验
-
-- **表单状态**：`React Hook Form` —— 高性能、零不必要重绘的表单状态管理
-    
-- **数据校验**：`Zod` —— 运行时 Schema 校验与类型推导
-    
-- **桥接工具**：`@hookform/resolvers` —— 完美的 RHF ↔ Zod 表单验证粘合剂
-    
-
-### 📦 核心业务与增强库
-
-- **金融支付**：`@stripe/react-stripe-js`
-    
-- **内容编辑**：`react-quill` (富文本) + `react-markdown` (Markdown 解析)
-    
-- **数据看板**：`recharts` (轻量级高可定制图表)
-    
-- **地图组件**：`react-leaflet` (基于 OpenStreetMap 的交互地图)
-    
-- **时间处理**：`date-fns` / `moment`
-    
-- **图形渲染**：`three` (WebGL / 3D 场景支持)
-    
-- **文档导出**：`html2canvas` + `jsPDF` (前端一键生成并下载 PDF 报表)
-    
-- **快捷交互**：`cmdk` (像 Raycast 一样爽快的全局命令面板)
-    
-
-## 📂 项目关键配置
-
-- **`jsconfig.json`**：配置了路径别名 `@/*` 指向 `src/*`，并开启了 `"checkJs": true`，配合 `@ts-check` 或 JSDoc 实现无编译成本的类型安全。
-    
-- **`components.json`**：符合 `shadcn/ui` 架构的组件初始化配置文件。
-    
-- **`@/api/client.js`**：封装了 Axios 实例，统一管理 baseUrl、请求/响应拦截器，以及 JWT Token 的存储与携带逻辑。
-    
-
-## 💻 本地开发指南
-
-### 1. 克隆并安装依赖
-
-Bash
+## 📂 目录结构
 
 ```
-git clone <repository-url>
-cd base44-app
+frontend/
+├── public/                 # 静态资源
+├── src/
+│   ├── api/                # API 封装
+│   │   ├── client.js       # Axios 实例：baseURL、JWT、401 拦截
+│   │   ├── entityApi.js    # 各实体通用 CRUD
+│   │   └── member.js       # 会员相关 API（旧版，推荐用 entityApi）
+│   ├── components/         # 组件
+│   │   ├── landing/        # 官网首页组件
+│   │   ├── member/         # 会员中心组件
+│   │   ├── admin/          # 后台组件
+│   │   └── ui/             # shadcn/ui 基础组件
+│   ├── lib/                # 工具与上下文
+│   │   ├── AuthContext.jsx # 全局登录态
+│   │   └── query-client.js # react-query 配置
+│   ├── pages/              # 页面级组件
+│   │   ├── Home.jsx        # 官网首页
+│   │   ├── Login.jsx       # 登录
+│   │   ├── Register.jsx    # 注册
+│   │   ├── MemberInit.jsx  # 会员初始页（AI 分析动画引导）
+│   │   ├── member/         # 会员中心子页面
+│   │   │   ├── Dashboard.jsx
+│   │   │   ├── Profile.jsx
+│   │   │   ├── Submissions.jsx
+│   │   │   ├── Reports.jsx
+│   │   │   └── Subscription.jsx
+│   │   └── admin/          # 管理员后台子页面
+│   ├── App.jsx             # 路由总入口
+│   └── main.jsx            # React 挂载入口
+├── package.json
+├── vite.config.js          # Vite 配置 + 开发代理
+├── jsconfig.json           # 路径别名 @/* + checkJs
+├── tailwind.config.js      # Tailwind 主题扩展
+└── components.json         # shadcn/ui 配置
+```
+
+## ⚙️ 环境变量与参数说明
+
+开发环境可在项目根目录创建 `.env.local`（Vite 默认读取）：
+
+| 变量名 | 示例值 | 说明 |
+|---|---|---|
+| `VITE_API_BASE_URL` | `http://localhost:8000/api/v1` 或 `/api/v1` | 后端 API 基础路径。开发时若使用 Vite 代理，建议填 `/api/v1` |
+| `VITE_STRIPE_PUBLIC_KEY` | `pk_test_xxx` | Stripe 公钥，用于前端调起支付 |
+| `VITE_APP_OSS_BASE_URL` | `https://assets.gapclub.fmtcloud.cn` | 阿里云 OSS / CDN 基础地址 |
+
+> Vite 要求前端环境变量必须以 `VITE_` 开头才能在代码中通过 `import.meta.env.VITE_XXX` 读取。
+
+## 🔄 主要页面流程
+
+### 1. 官网与引导
+
+```
+/                     首页（官网）
+/knowledge-base       知识库文章列表
+/member/init          会员初始页：选择健康关注点 → AI 分析动画 → 引导注册
+```
+
+`MemberInit.jsx` 现在内置 AI 分析动画（`AiAnalysisVisualizer`），模拟 AI 解析用户健康信号并生成推荐，最后引导创建账号。
+
+### 2. 认证
+
+```
+/login                登录，成功后写入 localStorage: fmt_access_token
+/register             注册，成功后自动登录
+```
+
+### 3. 会员中心（需登录，role=member/admin）
+
+```
+/member               工作台 Dashboard
+/member/profile       完善健康档案
+/member/submissions   提交健康检测报告
+/member/reports       查看 AI 营养报告
+/member/subscription  会员订阅与支付
+```
+
+### 4. 管理员后台（需 role=admin）
+
+```
+/admin                管理员看板
+/admin/members        会员管理
+/admin/products       产品管理
+/admin/knowledge      知识库管理
+```
+
+## 💻 本地开发
+
+### 1. 安装依赖
+
+```bash
+cd frontend
 npm install
 ```
 
 ### 2. 配置环境变量
 
-在项目根目录创建 `.env.local` 文件，并根据后端 FastAPI 的部署情况配置 API 路径：
-
-Code snippet
-
-```
-VITE_API_BASE_URL=http://localhost:8000
-VITE_STRIPE_PUBLIC_KEY=your_stripe_public_key
+```bash
+cp .env.example .env.local
+# 编辑 .env.local
 ```
 
 ### 3. 启动开发服务器
 
-Bash
-
-```
+```bash
 npm run dev
 ```
 
-> 访问 [http://localhost:5173](https://www.google.com/search?q=http://localhost:5173) 查看应用。
+默认访问：`http://localhost:5173`
 
-### 4. 代码类型检查
+### 4. 常用脚本
 
-虽然不需要编译 TS，但在提交代码前可以通过以下命令对项目内的 JS/JSX 进行严格的类型检查：
+| 脚本 | 说明 |
+|---|---|
+| `npm run dev` | 启动开发服务器（Vite HMR） |
+| `npm run build` | 生产构建，输出到 `dist/` |
+| `npm run preview` | 预览生产构建 |
+| `npm run lint` | ESLint 检查 |
+| `npm run lint:fix` | ESLint 自动修复 |
+| `npm run typecheck` | TypeScript 对 JS/JSX 做类型检查 |
 
-Bash
+## 🔌 与后端联调
 
-```
-npm run check-types
-```
-
-## 🐳 生产部署 (Docker + Nginx)
-
-项目已经内置了生产级容器化部署方案，通过 Nginx 反向代理解决单页应用（SPA）的路由刷新 404 问题。
-
-### 1. 构建 Docker 镜像
-
-Bash
-
-```
-docker build -t g क्लब-frontend:latest .
-```
-
-### 2. 运行容器
-
-Bash
-
-```
-docker run -d -p 80:80 --name gap-club-web gap-club-frontend:latest
-```
-
-> **配置文件说明：**
-> 
-> - `Dockerfile`：采用多阶段构建（Multi-stage build）。第一阶段基于 Node.js 镜像动态打包，第二阶段将打包后的 `dist` 静态资源拷贝至轻量级的 `nginx:alpine` 镜像中。
->     
-> - `nginx.conf`：配置了 `try_files $uri $uri/ /index.html;`，确保 React Router 的浏览器历史路由（BrowserRouter）在刷新页面时能被正确接管。
->
+- 开发时 Vite 已配置代理（见 `vite.config.js`）：
+  - `/api/*` → `http://localhost:8000`
+  - `/static/*` → `http://localhost:8000`
+- 因此只要设置 `VITE_API_BASE_URL=/api/v1`，前端请求会经 Vite 代理转发到本地后端，无需处理跨域。
+- 如需直接访问后端（如真机调试），可设置 `VITE_API_BASE_URL=http://<后端IP>:8000/api/v1`，同时确保后端 `app/main.py` 的 `CORSMiddleware` 已放行该前端地址。
