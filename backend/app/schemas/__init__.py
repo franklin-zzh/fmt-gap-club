@@ -1,6 +1,17 @@
+import json
 from datetime import datetime
-from typing import Optional, List
-from pydantic import BaseModel, EmailStr, ConfigDict
+from typing import Any, Optional, List
+from pydantic import BaseModel, EmailStr, ConfigDict, field_validator
+
+
+def _parse_json_string(value: Any) -> Any:
+    """If a JSON-type column is returned as a string, parse it into Python objects."""
+    if isinstance(value, str):
+        try:
+            return json.loads(value)
+        except json.JSONDecodeError:
+            return value
+    return value
 
 
 # ===================== User & Auth =====================
@@ -42,6 +53,11 @@ class ProductBase(BaseModel):
     order_index: int = 0
     is_active: bool = True
 
+    @field_validator("tags", mode="before")
+    @classmethod
+    def _parse_tags(cls, value: Any) -> Any:
+        return _parse_json_string(value)
+
 
 class ProductCreate(ProductBase):
     pass
@@ -63,6 +79,11 @@ class ProductDetailBase(BaseModel):
     efficacy: dict = {}
     core_meal_replacement: dict = {}
     synergistic_nutrients: dict = {}
+
+    @field_validator("efficacy", "core_meal_replacement", "synergistic_nutrients", mode="before")
+    @classmethod
+    def _parse_json_details(cls, value: Any) -> Any:
+        return _parse_json_string(value)
 
 
 class ProductDetailCreate(ProductDetailBase):
@@ -116,6 +137,11 @@ class CommentBase(BaseModel):
     rating: int = 5
     metrics: dict = {}
 
+    @field_validator("metrics", mode="before")
+    @classmethod
+    def _parse_metrics(cls, value: Any) -> Any:
+        return _parse_json_string(value)
+
 
 class CommentCreate(CommentBase):
     pass
@@ -138,6 +164,11 @@ class MemberProfileBase(BaseModel):
     allergies: str = ""
     medical_history: str = ""
 
+    @field_validator("health_goals", "lifestyle_tags", mode="before")
+    @classmethod
+    def _parse_tags(cls, value: Any) -> Any:
+        return _parse_json_string(value)
+
 
 class MemberProfileCreate(MemberProfileBase):
     pass
@@ -155,6 +186,11 @@ class HealthSubmissionBase(BaseModel):
     answers: dict = {}
     file_url: str = ""
 
+    @field_validator("answers", mode="before")
+    @classmethod
+    def _parse_answers(cls, value: Any) -> Any:
+        return _parse_json_string(value)
+
 
 class HealthSubmissionCreate(HealthSubmissionBase):
     pass
@@ -168,6 +204,11 @@ class HealthSubmissionResponse(HealthSubmissionBase):
     recommendations: List[dict] = []
     summary: str = ""
     created_at: datetime
+
+    @field_validator("recommendations", mode="before")
+    @classmethod
+    def _parse_recommendations(cls, value: Any) -> Any:
+        return _parse_json_string(value)
 
 
 # ===================== Subscription =====================

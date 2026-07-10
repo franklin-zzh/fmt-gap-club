@@ -21,8 +21,9 @@ import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
+import json
 from datetime import datetime
-from sqlalchemy import create_engine, MetaData, Table, inspect, text
+from sqlalchemy import create_engine, MetaData, Table, inspect, text, JSON
 from app.db.base import Base
 from app import models  # noqa: F401 - 注册所有模型到 Base.metadata
 
@@ -51,7 +52,9 @@ def get_sqlite_data(sqlite_url: str) -> dict:
                 print(f"  [SQLite] 表 {table_name}: 不存在，跳过")
                 continue
 
-            columns = [col["name"] for col in inspector.get_columns(table_name)]
+            columns_info = inspector.get_columns(table_name)
+            columns = [col["name"] for col in columns_info]
+            json_columns = {col["name"] for col in columns_info if isinstance(col["type"], JSON)}
             result = conn.execute(text(f"SELECT * FROM {table_name}"))
             rows = result.fetchall()
 
@@ -62,6 +65,12 @@ def get_sqlite_data(sqlite_url: str) -> dict:
                 for k, v in row_dict.items():
                     if isinstance(v, datetime):
                         row_dict[k] = v.replace(tzinfo=None)
+                    # SQLite 以文本形式存储 JSON，迁移到 MySQL 前需反序列化
+                    if k in json_columns and isinstance(v, str):
+                        try:
+                            row_dict[k] = json.loads(v)
+                        except json.JSONDecodeError:
+                            pass
                 table_data.append(row_dict)
 
             data[table_name] = table_data
