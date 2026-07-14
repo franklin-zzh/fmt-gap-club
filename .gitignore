@@ -1,9 +1,9 @@
 .reasonix/
-resonix.toml
+reasonix.toml
 .DS_Store
 .vscode/
 .idea/
-
+*.tar.gz
 
 #md files
 skills-v0/

@@ -264,6 +264,20 @@ docker compose up -d --build
 
 部署云服务器参考钉钉-知识库/研发 & 技术/项目/部署项目-阿里云服务器。
 
+###### 打包部署
+```
+tar czvf gapclub-prod.tar.gz docker-compose.yml backend/Dockerfile backend/requirements.txt backend/app backend/scripts frontend/Dockerfile frontend/package.json frontend/package-lock.json frontend/nginx.conf frontend/index.html frontend/src frontend/public frontend/vite.config.js frontend/tailwind.config.js frontend/postcss.config.js frontend/components.json frontend/jsconfig.json frontend/eslint.config.js
+
+# 复制到指定项目并解压
+tar xzvf gapclub-prod.tar.gz
+```
+增加.env配置文件
+
+###### deploy
+在服务器增加入网分发：etc/nginx/conf/gapclub.fmtcloud.cn.conf
+添加gapclub.fmtcloud.cn.key/pem
+项目前端增加nginx.conf反向代理
+
 > 部署前请确保：
 > - 后端 `.env` 中的 `SECRET_KEY` 已替换为强随机字符串；
 > - 生产数据库 URL 指向云数据库或自建 MySQL；

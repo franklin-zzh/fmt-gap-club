@@ -49,10 +49,7 @@ export default [
       ],
       "react/prop-types": "off",
       "react/react-in-jsx-scope": "off",
-      "react/no-unknown-property": [
-        "error",
-        { ignore: ["cmdk-input-wrapper", "toast-close"] },
-      ],
+      "react/no-unknown-property": ["error", { ignore: [] }],
       "react-hooks/rules-of-hooks": "error",
     },
   },
